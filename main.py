@@ -29,14 +29,14 @@ def convert(line):
         line.remove('\n')
     return line
 
-def combine(reviewList):
+def combine(reviewList, minReviews):
     # key = name, value[0] = total rating points, value[1] = # of reviews
     whiskeyDict = {}
     count = 0
     for review in reviewList:
         count += 1
         if review.name in whiskeyDict.keys():
-            print(count, review.name)
+            #print(count, review.name)
             try:
                 whiskeyDict[review.name][0] += float(review.rating)
                 whiskeyDict[review.name][1] += 1
@@ -57,11 +57,17 @@ def combine(reviewList):
 
     for key in sorted_keys:
         # here, restricting the list only whiskies w/ at least 50 ratings
-        if whiskeyDict[key][1] >= 50:
+        if whiskeyDict[key][1] >= minReviews:
             sorted_ratings[key] = avg_ratings_Dict[key]    
-    print(sorted_ratings)
+    return sorted_ratings
 
 def main():
+    minReviews = int(input("Minimum # of reviews? "))
+    
+    # TODO: add code to filter by style, price
+    desiredStyle = input("Any region or style you are interested in? ")
+    maxPrice = input("What is the maximum price you'd pay for a bottle? ")
+    
     file = open("reddit_whisky_data.csv", "r", errors = 'ignore')
     
     categories = file.readline().split(',')
@@ -78,10 +84,14 @@ def main():
         reviewList.append(review)
     file.close()
     
-    combine(reviewList)
+    sorted_ratings = combine(reviewList, minReviews)
+    
+    print(str(len(sorted_ratings))+" Unique Whiskies Found:\n")
+    print(sorted_ratings)
     
     #print(categories)
 #    for review in reviewList:
 #        review.toString()
-    
-main()
+
+if __name__ == "__main__":
+    main()
