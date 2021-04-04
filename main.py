@@ -20,6 +20,20 @@ class Review():
               f'Reviewer Rating: {self.rating}\n'+
               f'Whisky Region or Style: {self.style}\n'+
               f'Price Paid: {self.price}\n')
+        
+class Whiskey():
+    """Represents a single whisk(e)y"""
+    def __init__(self, name, rating, style, price):
+        self.name = name
+        self.rating = rating
+        self.style = style
+        self.price = price
+    
+    def toString(self):
+        print(f'Whisky Name: {self.name}\n'+
+              f'Reviewer Rating: {self.rating}\n'+
+              f'Whisky Region or Style: {self.style}\n'+
+              f'Price Paid: {self.price}\n')
 
 def convert(line):
     """Converts a line of text into the args for Review class"""
@@ -61,13 +75,7 @@ def combine(reviewList, minReviews):
             sorted_ratings[key] = avg_ratings_Dict[key]    
     return sorted_ratings
 
-def main():
-    minReviews = int(input("Minimum # of reviews? "))
-    
-    # TODO: add code to filter by style, price
-    desiredStyle = input("Any region or style you are interested in? ")
-    maxPrice = input("What is the maximum price you'd pay for a bottle? ")
-    
+def readFile():    
     file = open("reddit_whisky_data.csv", "r", errors = 'ignore')
     
     categories = file.readline().split(',')
@@ -83,10 +91,20 @@ def main():
         review = Review(argList[0], argList[1], argList[2], argList[3], argList[4])
         reviewList.append(review)
     file.close()
+    return reviewList
+
+def main():
+    minReviews = int(input("Minimum # of reviews? "))
+    
+    # TODO: add code to filter by style, price
+    desiredStyle = input("Any region or style you are interested in? ")
+    maxPrice = input("What is the maximum price you'd pay for a bottle? ")
+
+    reviewList = readFile()
     
     sorted_ratings = combine(reviewList, minReviews)
     
-    print(str(len(sorted_ratings))+" Unique Whiskies Found:\n")
+    print("\n"+str(len(sorted_ratings))+" Unique Whiskies Found:\n")
     print(sorted_ratings)
     
     #print(categories)
