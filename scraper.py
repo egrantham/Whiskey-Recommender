@@ -33,17 +33,17 @@ def readLinks(Links,names):
             print(count)
             count += 1
             if "old.reddit" in Links[i]:
-                soupList[name] = "Old Format"
+                soupList[name] += "Old Format"
                 continue
             if name in soupList:
                 review = soup.select_one("div[data-testid='comment-top-meta'] + div[data-test-id='comment']")
                 review_text = "".join([string for string in review.stripped_strings])
                 
                 if "/*# sourceMappingURL" in review_text:
-                    soupList[name] = "Ignore..."
+                    soupList[name] += "Ignore..."
                     continue
                 else:
-                    soupList[name]+= "\n" + review_text
+                    soupList[name]+= review_text
                 
             else:
                 review = soup.select_one("div[data-testid='comment-top-meta'] + div[data-test-id='comment']")
