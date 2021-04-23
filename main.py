@@ -128,52 +128,55 @@ def readFile():
 def runScraper(reviewList):
 
     outfile = open("output.csv","w+")
+    outfile.write("id,description")
+    
     links = []
     names = []
     
-    count = 0
+#    count = 0
     for review in reviewList:
         links.append(review.link)
         names.append(review.name)
-        count += 1
-        if count > 5:
-            break
+#        count += 1
+#        if count > 50:
+#            break
     soupDict = scraper.readLinks(links,names)
     print(soupDict.keys())
     
+    id = 0
+    
     for name,soup in soupDict.items():
         soup = soup.replace(',','')
+        id += 1
         try:
-            outfile.write("\n" + name + "\n" + str(soup))
+            outfile.write("\n" + str(id) + "," +
+                          name + "- " + str(soup))
         except:
             print('uh-oh!')
     outfile.close()
 
 def main():
     #getting input
-#    minReviews = int(input("Minimum # of reviews? "))
-#    desiredStyle = input("Any region or style you are interested in? ")
-#    maxPrice = float(input("What is the maximum price you'd pay for a bottle? "))
+    minReviews = int(input("Minimum # of reviews? "))
+    desiredStyle = input("Any region or style you are interested in? ")
+    maxPrice = float(input("What is the maximum price you'd pay for a bottle? "))
 #    minReviews = 5
 #    desiredStyle = "bourbon"
 #    maxPrice = 100
     
     #read file, combine data into review list
     reviewList = readFile()
-    runScraper(reviewList)
+#    runScraper(reviewList)
     
-    #sorted_ratings = combine(reviewList, minReviews, desiredStyle, maxPrice)
+    sorted_ratings = combine(reviewList, minReviews, desiredStyle, maxPrice)
     
     #output
-#    if len(sorted_ratings) == 0:
-#        print("\nNo whiskies match these parameters. Please try a different input.")
-#    else:
-#        print("\n"+str(len(sorted_ratings))+" Unique Whiskies Found:\n")
-#        for whiskey in sorted_ratings:
-#            print(whiskey.toString())
-
-
-
+    if len(sorted_ratings) == 0:
+        print("\nNo whiskies match these parameters. Please try a different input.")
+    else:
+        print("\n"+str(len(sorted_ratings))+" Unique Whiskies Found:\n")
+        for whiskey in sorted_ratings:
+            print(whiskey.toString())
 
 if __name__ == "__main__":
     main()
